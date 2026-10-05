@@ -1,0 +1,17 @@
+{
+  "name": "gumdrops-website",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1",
+    "build": "astro build",
+    "preview": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "devDependencies": {
+    "astro": "^5.13.0",
+    "wrangler": "^4.0.0"
+  }
+}

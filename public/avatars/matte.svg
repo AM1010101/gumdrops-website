@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 110" width="120" height="132" aria-hidden="true" class="candy candy--matte" data-working="false" data-still="false" style="--candy-color:#b78cc9"><style>.candy { display: block; flex: none; overflow: visible; }
+.candy__body { transform-box: view-box; transform-origin: 50px 87px; animation: candy-breathe 6s ease-in-out infinite; }
+.candy__eyes { transform-box: fill-box; transform-origin: center; animation: candy-blink 6.4s infinite; }
+.candy__gaze { animation: candy-glance 9s ease-in-out infinite; }
+.candy--bean .candy__eyes { animation-delay: -1.8s; }
+.candy--cushion .candy__eyes { animation-delay: -3.7s; }
+.candy--gumdrop .candy__gaze { animation-delay: -2.2s; }
+.candy--cushion .candy__gaze { animation-delay: -4.8s; }
+.candy--bean[data-working="true"] .candy__body { animation: candy-jelly 1.9s ease-in-out infinite; }
+.candy--gumdrop[data-working="true"] .candy__body { animation: candy-squash 1.6s ease-in-out infinite; }
+.candy--cushion[data-working="true"] .candy__body { animation: candy-rock 2.2s ease-in-out infinite; }
+.candy[data-working="true"] .candy__shadow { transform-origin: 50px 98px; animation: candy-shadow 1.9s ease-in-out infinite; }
+@keyframes candy-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.015, .985); } }
+@keyframes candy-blink { 0%, 40%, 43%, 72%, 75%, 100% { transform: scaleY(1); } 41.5%, 73.5% { transform: scaleY(.12); } }
+@keyframes candy-glance { 0%, 28%, 53%, 100% { transform: translateX(0); } 33%, 46% { transform: translateX(2px); } 73%, 84% { transform: translateX(-1.8px); } }
+@keyframes candy-jelly { 0%, 100% { transform: rotate(-3deg) scale(1.01,.99); } 30% { transform: rotate(4deg) scale(.96,1.04); } 60% { transform: rotate(-2deg) scale(1.04,.96); } 80% { transform: rotate(1deg) scale(.99,1.01); } }
+@keyframes candy-squash { 0%, 100% { transform: scale(1); } 25% { transform: scale(1.06,.94); } 52% { transform: translateY(-3px) scale(.96,1.04); } 75% { transform: scale(1.025,.975); } }
+@keyframes candy-rock { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg) translateY(-1px); } }
+@keyframes candy-shadow { 0%, 100% { transform: scaleX(1); opacity: 1; } 50% { transform: scaleX(.91); opacity: .75; } }
+.candy[data-still="true"] g, .candy[data-still="true"] ellipse { animation: none !important; }
+@media (prefers-reduced-motion: reduce) { .candy g, .candy ellipse { animation: none !important; } }
+.candy--sprinkle .candy__eyes { animation-delay: -2.6s; }
+.candy--striped .candy__eyes { animation-delay: -4.2s; }
+.candy--sprinkle[data-working="true"] .candy__body { animation: candy-roll 2.6s ease-in-out infinite; }
+.candy--striped[data-working="true"] .candy__body { animation: candy-ribbon 2s ease-in-out infinite; }
+@keyframes candy-roll { 0%,100% { transform: rotate(-6deg) translateX(-1px); } 50% { transform: rotate(6deg) translateX(1px); } }
+@keyframes candy-ribbon { 0%,100% { transform: rotate(-3deg) scale(1); } 35% { transform: rotate(3deg) scale(.98,1.02); } 70% { transform: rotate(-1deg) scale(1.02,.98); } }
+.candy--cherries .candy__body { transform-origin: 42px 12px; }
+.candy--cherries .candy__eyes { animation-delay: -2.9s; }
+.candy--round .candy__eyes { animation-delay: -1.1s; }
+.candy--redbean .candy__eyes { animation-delay: -4.6s; }
+.candy--cherries[data-working="true"] .candy__body { animation: candy-cherry-swing 2.5s ease-in-out infinite; }
+.candy--round[data-working="true"] .candy__body { animation: candy-rock 2.8s ease-in-out infinite; }
+.candy--redbean[data-working="true"] .candy__body { animation: candy-jelly 2.1s ease-in-out infinite; }
+@keyframes candy-cherry-swing { 0%,100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
+.candy--matte .candy__eyes { animation-delay: -3.2s; }
+.candy--matte[data-working="true"] .candy__body { animation: candy-rock 3s ease-in-out infinite; }
+.candy--floss .candy__body { transform-origin: 50px 100px; animation: candy-drift 7s ease-in-out infinite; }
+.candy--floss .candy__eyes { animation-delay: -2.1s; }
+.candy--icecream .candy__eyes { animation-delay: -4.1s; }
+.candy--floss[data-working="true"] .candy__body { animation: candy-drift 3s ease-in-out infinite; }
+.candy--icecream[data-working="true"] .candy__body { animation: candy-cream-bob 2.4s ease-in-out infinite; transform-origin: 50px 102px; }
+@keyframes candy-drift { 0%,100% { transform: rotate(-3deg) translateY(0); } 50% { transform: rotate(3deg) translateY(-2px); } }
+@keyframes candy-cream-bob { 0%,100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg) translateY(-2px); } }
+.candy--lollipop .candy__body { transform-origin: 50px 100px; }
+.candy--lollipop .candy__eyes { animation-delay: -1.9s; }
+.candy--cookie .candy__eyes { animation-delay: -3.9s; }
+.candy--lollipop[data-working="true"] .candy__body { animation: candy-cherry-swing 2.3s ease-in-out infinite; }
+.candy--cookie[data-working="true"] .candy__body { animation: candy-rock 2.7s ease-in-out infinite; }
+.candy--softserve .candy__eyes { animation-delay: -2.8s; }
+.candy--softserve[data-working="true"] .candy__body { animation: candy-cream-bob 2.6s ease-in-out infinite; transform-origin: 50px 102px; }
+</style><defs><linearGradient id="_R_0_-body" x1="0.2" y1="0" x2="0.8" y2="1" gradientUnits="objectBoundingBox"><stop offset="0" stop-color="white" stop-opacity="0.52"></stop><stop offset="0.3" stop-color="white" stop-opacity="0.06"></stop><stop offset="0.6" stop-color="white" stop-opacity="0"></stop><stop offset="1" stop-color="#30142e" stop-opacity="0.46"></stop></linearGradient><radialGradient id="_R_0_-glow" cx="0.28" cy="0.22" r="0.75"><stop stop-color="white" stop-opacity="0.38"></stop><stop offset="0.65" stop-color="white" stop-opacity="0"></stop></radialGradient><linearGradient id="_R_0_-cone" x1="0" y1="0" x2="1" y2=".3"><stop stop-color="#b97330"></stop><stop offset=".4" stop-color="#edbb72"></stop><stop offset=".7" stop-color="#dba35b"></stop><stop offset="1" stop-color="#a9672e"></stop></linearGradient><clipPath id="_R_0_-cone-clip"><path d="M27 57 Q50 63 73 57 L54 99 Q50 107 46 99 Z"></path></clipPath><pattern id="_R_0_-waffle" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 1 H12 M1 0 V12" stroke="#8f5425" stroke-opacity=".4" stroke-width="1.5"></path><path d="M0 3 H12 M3 0 V12" stroke="#ffdfa3" stroke-opacity=".65" stroke-width="1"></path></pattern><radialGradient id="_R_0_-baked" cx=".4" cy=".35" r=".65"><stop stop-color="#ffe5ad" stop-opacity=".45"></stop><stop offset=".6" stop-color="#f9d090" stop-opacity=".15"></stop><stop offset="1" stop-color="#875022" stop-opacity=".5"></stop></radialGradient><radialGradient id="_R_0_-fluff" cx=".3" cy=".2" r=".85"><stop stop-color="#fff9fc" stop-opacity=".62"></stop><stop offset=".5" stop-color="white" stop-opacity=".1"></stop><stop offset="1" stop-color="#a24d89" stop-opacity=".26"></stop></radialGradient><radialGradient id="_R_0_-matte" cx=".3" cy=".2" r=".95"><stop stop-color="white" stop-opacity=".2"></stop><stop offset=".45" stop-color="white" stop-opacity=".03"></stop><stop offset="1" stop-color="#36233e" stop-opacity=".3"></stop></radialGradient><radialGradient id="_R_0_-blue" cx=".35" cy=".22" r=".8"><stop stop-color="#8ae4ff" stop-opacity=".8"></stop><stop offset=".35" stop-color="#17bcff" stop-opacity=".25"></stop><stop offset=".72" stop-color="#0861cf" stop-opacity=".35"></stop><stop offset="1" stop-color="#102477" stop-opacity=".85"></stop></radialGradient><linearGradient id="_R_0_-base" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#0649ad" stop-opacity=".45"></stop><stop offset=".5" stop-color="#40ccff" stop-opacity=".3"></stop><stop offset="1" stop-color="#063788" stop-opacity=".65"></stop></linearGradient><radialGradient id="_R_0_-shadow"><stop stop-color="#302037" stop-opacity="0.22"></stop><stop offset="1" stop-color="#302037" stop-opacity="0"></stop></radialGradient><clipPath id="_R_0_-clip"><path d="M50 18 C71 18 87 34 87 55 C87 76 72 91 50 91 C28 91 13 76 13 55 C13 34 29 18 50 18 Z"></path></clipPath><pattern id="_R_0_-sugar" width="9" height="11" patternUnits="userSpaceOnUse"><path d="M2 2l1.1 -.5 .6 1.3 -1 .6z" fill="white" opacity="0.28"></path><circle cx="7" cy="8" r="0.65" fill="white" opacity="0.38"></circle><circle cx="3" cy="9" r="0.45" fill="#7e481b" opacity="0.15"></circle></pattern></defs><ellipse class="candy__shadow" cx="50" cy="98" rx="34" ry="6" fill="url(#_R_0_-shadow)"></ellipse><g class="candy__body"><path d="M50 18 C71 18 87 34 87 55 C87 76 72 91 50 91 C28 91 13 76 13 55 C13 34 29 18 50 18 Z" fill="#b78cc9"></path><path d="M50 18 C71 18 87 34 87 55 C87 76 72 91 50 91 C28 91 13 76 13 55 C13 34 29 18 50 18 Z" fill="url(#_R_0_-matte)"></path><path d="M50 18 C71 18 87 34 87 55 C87 76 72 91 50 91 C28 91 13 76 13 55 C13 34 29 18 50 18 Z" fill="none" stroke="#42233a" stroke-opacity="0.14" stroke-width="1"></path><path d="" fill="white" opacity="0.62"></path><path d="" fill="none" stroke="white" stroke-opacity="0.23" stroke-width="2.2" stroke-linecap="round"></path><g clip-path="url(#_R_0_-clip)"><g transform="translate(0 4)"><g class="candy__gaze"><ellipse cx="33" cy="60" rx="5" ry="2.3" fill="#f74776" opacity="0.22"></ellipse><ellipse cx="67" cy="60" rx="5" ry="2.3" fill="#f74776" opacity="0.22"></ellipse><g class="candy__eyes" fill="#292033"><rect x="37" y="44.5" width="6.5" height="13" rx="3.25"></rect><rect x="56.5" y="44.5" width="6.5" height="13" rx="3.25"></rect></g></g></g></g></g></svg>

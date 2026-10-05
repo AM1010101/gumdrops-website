@@ -1,0 +1,140 @@
+---
+import AgentBubble from './AgentBubble.astro';
+const stages = [
+  {title:'Create your first agent',copy:'Start with one job you know well. Give your agent a clear role, a workspace and an example of a useful result.', agents:[{shape:'gumdrop',name:'Code reviewer',job:'Read a diff, check it against the project conventions and report concrete issues with file references. You decide which fixes to make.'}]},
+  {title:'Add more as you need',copy:'Keep responsibilities separate. A second agent brings a different brief and its own memory.',agents:[{shape:'round',name:'Competitor watcher',job:'Check named competitors on a schedule. Record what changed, link to sources and explain what may matter for your product. Needs web access through your chosen tools.'},{shape:'cookie',name:'Issue triager',job:'Review new issues, identify duplicates, ask for missing reproduction details and suggest priorities for the project.'}]},
+  {title:'Start a second project',copy:'Put agents in a second project’s .gumdrops/agents/ folder. Give them that project’s workspace, tools and instructions.',agents:[{shape:'icecream',name:'Video assistant',job:'With a local video tool such as FFmpeg installed, prepare clips, convert formats and assemble draft cuts from your brief. Review the exported video yourself.'},{shape:'floss',name:'Research assistant',job:'Gather source material, keep references and write a concise brief. Store useful findings in memory for the next run.'}]},
+  {title:'Turn a good agent into a template',copy:'Once its instructions work, keep a reusable copy of the agent folder. Keep the role and skills; remove project-specific memory and check tool settings.',agents:[{shape:'gumdrop',name:'Code reviewer',job:'Save the code reviewer from your first project as a reusable folder. Keep its review rules and skills, then remove project-specific memory before copying it.'}]},
+  {title:'Reuse it across your projects',copy:'Copy the template into each project and adjust its workspace, permissions and schedule. Each copy develops its own memory. Template changes do not automatically update copies.',agents:[{shape:'gumdrop',name:'Reviewer · Coding project',job:'The same code-review template, configured for Coding project. It uses this project’s conventions, workspace and test commands.'},{shape:'gumdrop',name:'Reviewer · Video project',job:'Another copy of the same reviewer in Video project. Its role stays consistent, while its workspace, project instructions and memory are separate.'}]},
+  {title:'Grow your agent teams',copy:'Refine roles from real results. Keep what works, tighten the briefs and add schedules where they help. Build a team around your workflow, one useful job at a time.',agents:[{shape:'sprinkle',name:'Workflow maintainer',job:'Review recurring work, identify missed steps and propose changes to agent instructions. You approve changes that affect the team’s responsibilities.'},{shape:'lollipop',name:'Content assistant',job:'Draft release notes, scripts and product updates from your source material. Follow your voice and leave publication to you.'},{shape:'softserve',name:'Design reviewer',job:'With screenshot or browser tools configured, review interfaces for clarity, consistency and mobile usability. Describe specific changes to consider.'},{shape:'bean',name:'Your next specialist',job:'Choose the repetitive job that still takes your time. Give it a narrow brief, the tools it needs and a clear way to judge the result.'}]},
+];
+const reviewer = stages[0].agents[0];
+const reusableAgent = stages[1].agents[0];
+const projectA = [reviewer, ...stages[1].agents];
+const projectB = stages[2].agents;
+const slotFor = (shape: string) => ({gumdrop:1, round:2, cookie:3, icecream:2, floss:3, sprinkle:4, lollipop:4, softserve:5}[shape] ?? 6);
+const groups = [
+  [{label:'Coding project',agents:[reviewer]}],
+  [{label:'Coding project',agents:projectA}],
+  [{label:'Coding project',agents:projectA},{label:'Video project',agents:projectB}],
+  [{label:'Reusable template',agents:[reviewer],template:true}],
+  [{label:'Coding project',agents:[reusableAgent]},{label:'Video project',agents:[reusableAgent]}],
+  [{label:'Coding project',agents:[...projectA,stages[5].agents[0],stages[5].agents[2]]},{label:'Video project',agents:[...stages[1].agents,...projectB,stages[5].agents[1]]}],
+];
+
+// Combine template creation and reuse into one step, retaining the copying scene.
+stages[4].title = 'Create reusable templates';
+stages[4].copy = 'Keep a reusable copy of a proven agent folder. Remove project-specific memory, then copy it into each project and adjust its workspace, tools and schedule. Each copy keeps its own memory.';
+stages.splice(3, 1);
+groups.splice(3, 1);
+stages.splice(2, 1);
+groups.splice(2, 1);
+
+---
+<section class="agent-journey" id="journey" aria-labelledby="journey-title">
+  <div class="journey-heading"><h2 id="journey-title">Build your team, one agent at a time</h2></div>
+  <ol class="journey-path">
+    <svg class="journey-route" aria-hidden="true" preserveAspectRatio="none"><path class="route-line" fill="none"/></svg>
+    {stages.map((stage,index) => <li class="journey-step">
+      <span class="journey-number" aria-hidden="true">{String(index+1).padStart(2,'0')}</span>
+      <div class="journey-step-copy"><h3>{stage.title}</h3><div class="journey-agent step-info"><button class="agent-trigger info-trigger" aria-label={`About step ${index + 1}: ${stage.title}`} aria-expanded="false" aria-controls={`step-info-${index}`}><span aria-hidden="true">i</span></button><div class="agent-popover" id={`step-info-${index}`} role="region" aria-label={stage.title}><strong>{stage.title}</strong><p>{stage.copy}</p></div></div></div>
+      <div class={`journey-scene scene-${index >= 2 ? index + 2 : index}`}>
+        {index === 2 && <div class="copy-source" aria-hidden="true"><div class="copy-template"><img src="/avatars/round.svg" width="48" height="53"/></div><svg class="copy-branches" viewBox="0 0 400 46" fill="none"><path d="M200 0V13M200 13H100V40M200 13H300V40" stroke="currentColor" stroke-width="1.7"/><path d="M95 34L100 40L105 34M295 34L300 40L305 34" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>}
+        {groups[index].map((group,groupIndex) => <div class={`project-folder ${group.label === 'Video project' ? 'project-b' : 'project-a'} ${'template' in group ? 'template-stack' : ''}`}>
+          <span class="folder-tab">{group.label}</span>
+          <div class="journey-agents">{group.agents.map((agent,agentIndex) => <AgentBubble agent={agent} id={`${index}-${groupIndex}-${agentIndex}`} slot={index === 2 ? 1 : index === 3 && groupIndex === 1 ? agentIndex + 1 : slotFor(agent.shape)} speech={index === 0 ? 'I do code review.' : index === 1 && agent.shape === 'round' ? 'I track competitor updates.' : index === 1 && agent.shape === 'cookie' ? 'I triage issues.' : undefined}/>)}
+          {index === 3 && groupIndex === 1 && <div class="journey-agent" style="grid-column:3;grid-row:2"><button class="agent-trigger add-agent" aria-label="Explore your next specialist" aria-expanded="false" aria-controls="job-next">+</button><div class="agent-popover" id="job-next" role="region" aria-label="Your next specialist"><strong>Your next specialist</strong><p>Choose the repetitive job that still takes your time. Give it a focused brief and the tools it needs.</p></div></div>}</div>
+        </div>)}
+      </div>
+    </li>)}
+  </ol>
+</section>
+<script>
+const route = document.querySelector<SVGSVGElement>('.journey-route');
+const journey = document.querySelector<HTMLElement>('.journey-path');
+function drawRoute() {
+  if (!route || !journey) return;
+  const steps = journey.querySelectorAll<HTMLElement>('.journey-step');
+  const box = journey.getBoundingClientRect();
+  const width = box.width;
+  const mobile = window.matchMedia('(max-width:760px)').matches;
+  const first = steps[0].getBoundingClientRect();
+  const third = steps[2].getBoundingClientRect();
+  const fourth = steps[3].getBoundingClientRect();
+  const y1 = first.top - box.top;
+  const y2 = third.top - box.top;
+  const y3 = fourth.top - box.top;
+  route.setAttribute('viewBox', `0 0 ${width} ${box.height}`);
+  let path;
+  if (mobile) {
+    const x = 11;
+    path = `M${x} 18V${box.height - 28}`;
+  } else {
+    const right = width - 1, radius = 32, mid = (y1 + y2) / 2;
+    path = `M0 ${y1}H${right - radius}Q${right} ${y1} ${right} ${y1 + radius}V${y2 - radius}Q${right} ${y2} ${right - radius} ${y2}H${radius}Q0 ${y2} 0 ${y2 + radius}V${y3 - radius}Q0 ${y3} ${radius} ${y3}H${right}`;
+  }
+  route.querySelector('.route-line')!.setAttribute('d', path);
+
+}
+if (journey) new ResizeObserver(drawRoute).observe(journey);
+window.addEventListener('resize', drawRoute);
+drawRoute();
+const agents = Array.from(document.querySelectorAll<HTMLElement>('.journey-agent'));
+function closeAll(except?: HTMLElement) {
+  agents.forEach(agent => { if (agent !== except) { agent.classList.remove('is-open'); agent.querySelector('button')?.setAttribute('aria-expanded', 'false'); } });
+}
+agents.forEach(agent => {
+  const button = agent.querySelector('button');
+  const panel = agent.querySelector<HTMLElement>('.agent-popover');
+  if (!button || !panel) return;
+  function place() {
+    const rect = button.getBoundingClientRect();
+    panel.style.position = 'fixed'; panel.style.bottom = 'auto'; panel.style.right = 'auto';
+    panel.style.left = `${Math.max(12, Math.min(rect.left, window.innerWidth - panel.offsetWidth - 12))}px`;
+    panel.style.top = `${rect.top > panel.offsetHeight + 20 ? rect.top - panel.offsetHeight - 10 : rect.bottom + 10}px`;
+  }
+  button.addEventListener('pointerenter', place);
+  button.addEventListener('focus', place);
+  button.addEventListener('click', place);
+  window.addEventListener('scroll', place, { passive: true });
+  window.addEventListener('resize', place);
+  button.addEventListener('click', () => {
+    const open = !agent.classList.contains('is-open'); closeAll();
+    agent.classList.toggle('is-open', open); button.setAttribute('aria-expanded', String(open));
+  });
+
+  agent.addEventListener('pointerleave', () => { if (!agent.classList.contains('is-open')) button.setAttribute('aria-expanded', 'false'); });
+
+  button.addEventListener('blur', () => { if (!agent.classList.contains('is-open')) button.setAttribute('aria-expanded', 'false'); });
+});
+document.addEventListener('click', event => { if (!(event.target as Element).closest('.journey-agent')) closeAll(); });
+document.addEventListener('keydown', event => { if (event.key === 'Escape') { closeAll(); const active = document.activeElement as HTMLElement; active?.blur(); } });
+</script>
+<style is:global>
+.agent-journey{padding:55px 40px}.journey-heading{display:flex;justify-content:space-between;align-items:end;gap:32px;margin-bottom:28px}.journey-heading h2{margin:0;font-size:36px}.journey-heading>p{max-width:280px;font-size:14px;color:#786b70}.journey-path{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.journey-step{position:relative;border:1px solid #e8dcd1;border-radius:14px;padding:20px;background:#fffaf4;min-width:0}.journey-number{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#f3e2d0;color:#946347;font-size:10px;font-weight:700;float:left;margin-right:10px}.journey-step-copy h3{font-size:18px;letter-spacing:-.4px;margin:4px 0 12px;min-height:24px}.journey-step-copy>p{font-size:13px;line-height:1.6;color:#786b70;margin:0;max-width:480px}.journey-agents{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;align-items:start}.journey-agent{position:relative;width:90px}.agent-trigger{border:0;background:transparent;font:inherit;color:inherit;width:100%;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px;border-radius:10px}.agent-trigger span{font-size:10px;line-height:1.3;text-align:center;max-width:85px}.agent-trigger img{transition:transform .18s}.agent-trigger:hover img{transform:translateY(-3px)}.agent-trigger:focus-visible{outline:2px solid #be4270;outline-offset:3px}.agent-popover{position:absolute;bottom:calc(100% + 8px);left:0;z-index:20;width:260px;padding:16px;background:#352c35;color:#fff3e6;border-radius:12px;box-shadow:0 10px 30px #352c3526;visibility:hidden;opacity:0;pointer-events:none;transition:opacity .15s}.agent-popover::after{content:'';position:absolute;top:100%;left:32px;border:7px solid transparent;border-top-color:#352c35}.agent-popover strong{font-size:13px}.agent-popover p{font-size:12px;line-height:1.65;color:#e0ced8;margin:8px 0 0}.journey-agent.is-open .agent-popover{visibility:visible;opacity:1;pointer-events:auto}.journey-agent:last-child .agent-popover{left:auto;right:0}.journey-agent:last-child .agent-popover::after{left:auto;right:32px}.journey-footnote{font-size:11px;color:#85787c;margin:18px 0 0;max-width:850px}@media(max-width:760px){.agent-journey{padding:40px 24px}.journey-heading{display:block}.journey-heading h2{font-size:30px}.journey-heading>p{max-width:100%}.journey-path{grid-template-columns:1fr;gap:12px}.journey-step{padding:16px}.journey-agents{gap:4px}.journey-agent{width:70px}.agent-trigger span{font-size:9px}.agent-popover{width:235px}.journey-agent:nth-child(n+3) .agent-popover{left:auto;right:0}.journey-agent:nth-child(n+3) .agent-popover::after{left:auto;right:25px}}@media(prefers-reduced-motion:reduce){.agent-trigger img,.agent-popover{transition:none}.agent-trigger:hover img{transform:none}}
+
+/* A compact serpentine route: left to right, then back along the next row. */
+.journey-path{gap:0 56px;isolation:isolate;padding:12px 0}.journey-step{border:0;background:transparent;padding:24px 18px 28px 42px;min-height:250px;border-top:2px dashed #d8bda7;border-radius:0}.journey-step:nth-of-type(1){grid-column:1;grid-row:1}.journey-step:nth-of-type(2){grid-column:2;grid-row:1;border-right:2px dashed #d8bda7;border-radius:0 38px 38px 0}.journey-step:nth-of-type(3){grid-column:2;grid-row:2}.journey-step:nth-of-type(4){grid-column:1;grid-row:2;border-left:2px dashed #d8bda7;border-radius:38px 0 0 38px}.journey-step:nth-of-type(5){grid-column:1;grid-row:3}.journey-step:nth-of-type(6){grid-column:2;grid-row:3}.journey-step:nth-of-type(odd)::before{content:'';position:absolute;top:-2px;left:100%;width:56px;border-top:2px dashed #d8bda7}.journey-step:nth-of-type(3)::before{left:auto;right:100%}.journey-number{position:absolute;top:-16px;left:38px;border:4px solid #fbf7f0;width:32px;height:32px;font-size:10px;float:none;margin:0}.journey-step-copy h3{margin-top:8px}.journey-agents{gap:12px;margin-top:16px}.journey-agent{width:68px}.agent-trigger{width:64px;height:64px;border-radius:50%;background:#f4e8dc;border:1px solid #e4cdbb;padding:4px;box-shadow:0 3px 0 #e7d9cd;position:relative}.agent-trigger img{width:48px;height:53px}.agent-trigger span{position:absolute;top:70px;width:90px;font-size:9px;font-weight:500;max-width:90px}.journey-agent{margin-bottom:22px}.journey-agent.is-open .agent-trigger{border-color:#bd7894;background:#f8dfeb;box-shadow:0 0 0 3px #ead0dc}.agent-popover{border:1px solid #604656;box-shadow:0 12px 35px #352c3533}.agent-popover strong{font-size:15px}.agent-popover p{font-size:13px}.journey-footnote{margin-top:6px}
+@media(max-width:760px){.journey-path{display:block;padding:0 0 0 10px}.journey-step{min-height:0;padding:16px 0 30px 32px!important;border:0!important;border-left:2px dashed #d8bda7!important;border-radius:0!important}.journey-step::before{display:none}.journey-number{left:-17px;top:18px}.journey-agents{gap:12px}.journey-heading{margin-bottom:20px}.journey-step-copy h3{margin-top:4px}.journey-agent{width:60px}.agent-trigger{width:56px;height:56px}.agent-trigger img{width:43px;height:47px}.agent-trigger span{top:62px;width:68px;font-size:8px}.journey-footnote{margin-top:10px}}
+.journey-step-copy{display:flex;align-items:center;gap:10px}.journey-step-copy h3{margin:8px 0 12px}.step-info{width:24px!important;margin:0!important;flex:none}.info-trigger{width:24px!important;height:24px!important;border-radius:50%;box-shadow:none;font-family:Georgia,serif;font-style:italic;color:#946347;padding:0;border-color:#dcc6b6}.info-trigger span{position:static!important;width:auto!important;font-size:13px!important;line-height:1!important}.journey-step{min-height:205px}.journey-agents{margin-top:10px}@media(max-width:760px){.journey-step{min-height:0}.journey-step-copy h3{margin-top:4px}}
+
+.journey-scene{display:flex;gap:12px;align-items:start;flex-wrap:wrap;padding-top:17px;position:relative}.project-folder{position:relative;background:#f6ede1;border:1px solid #e2cbb6;border-radius:0 12px 12px 12px;padding:14px 12px 12px;min-width:94px}.folder-tab{position:absolute;bottom:100%;left:-1px;background:#f6ede1;border:1px solid #e2cbb6;border-bottom:0;border-radius:7px 7px 0 0;padding:3px 12px;font-size:9px;color:#8a6a55;white-space:nowrap}.project-folder .journey-agents{margin:0;gap:7px;max-width:255px}.project-folder .journey-agent{width:48px;margin:0}.project-folder .agent-trigger{width:46px;height:46px;background:#fff8ed;box-shadow:none}.project-folder .agent-trigger img{width:37px;height:41px}.template-stack{margin:6px 0 0 8px;box-shadow:-4px -4px 0 #efe1d1,-5px -5px 0 #d6bea8,-9px -9px 0 #f7eddf,-10px -10px 0 #dbc6b2}.template-stack .folder-tab{z-index:1}.role-symbol{position:absolute!important;top:auto!important;bottom:-3px;right:-3px;width:18px!important;height:18px;border-radius:50%;background:#fffaf4;border:1px solid #dec8b5;display:grid;place-items:center;font-size:8px!important;line-height:1!important;color:#79645e}.add-agent{font-size:24px;background:transparent!important;border-style:dashed!important;color:#ad8b76}.copy-source{flex-basis:100%;display:flex;justify-content:center;align-items:center;gap:18px;height:35px;color:#b78f70;position:relative;margin-top:-12px}.copy-source img{position:absolute;left:50%;transform:translateX(-50%);top:-8px}.copy-source span{margin-top:16px}.scene-4{max-width:265px}.scene-5 .project-folder .journey-agents{max-width:170px}.scene-5{flex-wrap:nowrap}.journey-step{min-height:210px}.scene-2 .project-folder .journey-agents{max-width:110px}.scene-2{gap:12px}@media(max-width:760px){.journey-step{min-height:0}.journey-scene{gap:8px}.project-folder{padding:12px 8px 8px}.scene-2 .project-folder .journey-agents,.scene-5 .project-folder .journey-agents{max-width:100px}.project-folder .journey-agents{gap:4px}.project-folder .journey-agent{width:43px}.project-folder .agent-trigger{width:41px;height:41px}.project-folder .agent-trigger img{width:33px;height:37px}.folder-tab{font-size:8px;padding:3px 8px}}
+
+.project-folder{--folder-bg:#f7e9dc;--folder-line:#dfc4ab;background:var(--folder-bg);border-color:var(--folder-line);width:200px;min-width:0;padding:14px 10px 12px}.project-b{--folder-bg:#eee8f5;--folder-line:#d0c1e0}.folder-tab{background:var(--folder-bg);border-color:var(--folder-line);font-size:10px}.project-folder .journey-agents{display:grid;grid-template-columns:repeat(3,56px);grid-template-rows:repeat(2,56px);gap:7px;max-width:none}.project-folder .journey-agent{width:56px}.project-folder .agent-trigger{width:54px;height:54px}.project-folder .agent-trigger img{width:45px;height:50px}.role-symbol{width:20px!important;height:20px;background:#fffaf4}.role-symbol svg{width:12px;height:12px}.scene-2,.scene-5{flex-wrap:nowrap;gap:12px}.scene-4{max-width:none;width:412px;gap:12px}.copy-source{height:100px;margin:0;display:block;width:100%;flex-basis:100%;position:relative}.copy-template{position:absolute;top:0;left:50%;transform:translateX(-50%);width:64px;height:62px;border:1px solid #dec8b5;border-radius:8px;background:#f6ede1;box-shadow:-4px -4px 0 #efe1d1,-5px -5px 0 #d6bea8,-8px -8px 0 #f7eddf,-9px -9px 0 #dbc6b2;display:grid;place-items:center}.copy-source .copy-template img{position:static;transform:none}.copy-branches{position:absolute;bottom:0;left:0;width:100%;height:46px;color:#ad8b76}.scene-4 .project-folder .journey-agents{grid-template-rows:56px}.template-stack{width:96px}.template-stack .journey-agents{grid-template-columns:56px;grid-template-rows:56px}.journey-step{min-height:248px}.journey-scene{gap:12px}@media(max-width:1100px) and (min-width:761px){.journey-path{gap:0 32px}.journey-step:nth-of-type(odd)::before{width:32px}.journey-step{padding-left:24px}.project-folder{width:168px;padding:12px 7px}.project-folder .journey-agents{grid-template-columns:repeat(3,46px);grid-template-rows:repeat(2,46px);gap:6px}.project-folder .journey-agent{width:46px}.project-folder .agent-trigger{width:44px;height:44px}.project-folder .agent-trigger img{width:37px;height:41px}.scene-4{width:348px}.scene-4 .project-folder .journey-agents{grid-template-rows:46px}.template-stack{width:76px}.template-stack .journey-agents{grid-template-columns:46px;grid-template-rows:46px}}
+@media(max-width:760px){.project-folder{width:calc(50% - 4px);padding:12px 6px 8px}.project-folder .journey-agents{grid-template-columns:repeat(2,44px);grid-template-rows:repeat(3,44px);gap:5px}.project-folder .journey-agent{width:44px;grid-column:auto!important;grid-row:auto!important}.project-folder .agent-trigger{width:42px;height:42px}.project-folder .agent-trigger img{width:35px;height:39px}.journey-scene{width:100%;gap:8px}.template-stack{width:76px}.template-stack .journey-agents{grid-template-columns:44px;grid-template-rows:44px}.scene-4 .project-folder .journey-agents{grid-template-rows:44px}.journey-step{min-height:0}}
+
+/* Five stops after combining template creation and reuse. */
+.journey-step:nth-of-type(5){grid-column:1 / -1;grid-row:3}.journey-step:nth-of-type(5)::before{display:none}.journey-step:nth-of-type(5) .journey-scene{max-width:520px}.journey-step:nth-of-type(5) .project-folder{width:240px}.journey-step:nth-of-type(5) .project-folder .journey-agents{max-width:none}@media(max-width:760px){.journey-step:nth-of-type(5) .project-folder{width:calc(50% - 4px)}}
+
+/* Four stops: first agent, more roles, reuse, assembled team. */
+.journey-step:nth-of-type(3){grid-column:2;grid-row:2}.journey-step:nth-of-type(4){grid-column:1;grid-row:2}.journey-step:nth-of-type(4) .journey-scene{flex-wrap:nowrap}@media(max-width:760px){.journey-step:nth-of-type(4) .journey-scene{flex-wrap:nowrap}}
+
+.journey-path{position:relative}.journey-route{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:-1}.route-line{stroke:#d3b299;stroke-width:1.7;stroke-dasharray:5 6;animation:journey-flow 2s linear infinite}.route-direction{stroke:#b58d70;stroke-width:1.5}.journey-step,.journey-step:nth-of-type(2),.journey-step:nth-of-type(4){border:0!important}.journey-step::before{display:none!important}.journey-number{background:#f3e2d0;box-shadow:0 0 0 3px #fbf7f0}.journey-path .journey-number{border-color:#fbf7f0}@keyframes journey-flow{to{stroke-dashoffset:-22}}@media(prefers-reduced-motion:reduce){.route-line{animation:none}}@media(max-width:760px){.journey-path .journey-step{border:0!important}.journey-route{z-index:-1}}
+
+.journey-path .journey-step:nth-of-type(3){grid-column:1 / -1;grid-row:2;padding-left:42px}.journey-path .journey-step:nth-of-type(4){grid-column:1 / -1;grid-row:3;padding-left:42px}.journey-path .journey-step:nth-of-type(3) .journey-scene{margin-left:auto;margin-right:auto}.journey-path .journey-step:nth-of-type(4) .journey-scene{max-width:520px;gap:20px}.journey-path .journey-step:nth-of-type(4) .project-folder{width:240px}.journey-step:nth-of-type(4) .project-folder .journey-agents{max-width:none}@media(max-width:760px){.journey-path .journey-step:nth-of-type(3),.journey-path .journey-step:nth-of-type(4){padding-left:32px}.journey-path .journey-step:nth-of-type(4) .journey-scene{gap:8px}.journey-path .journey-step:nth-of-type(4) .project-folder{width:calc(50% - 4px)}}
+.journey-path .journey-step:nth-of-type(4) .journey-scene{margin-left:auto;margin-right:auto}
+
+.speaking-agent{display:flex;align-items:center;gap:10px;width:auto!important}.speaking-agent .agent-trigger{flex:none;cursor:default}.agent-speech{position:relative;margin:0;padding:9px 11px;border-radius:12px;background:#fffaf4;border:1px solid #dec8b5;font-size:11px;line-height:1.4;color:#604c52;max-width:125px}.agent-speech::before{content:'';position:absolute;left:-5px;top:calc(50% - 4px);width:8px;height:8px;background:#fffaf4;border-left:1px solid #dec8b5;border-bottom:1px solid #dec8b5;transform:rotate(45deg)}.scene-0 .speaking-agent{grid-column:1 / -1!important}.scene-1 .project-folder .journey-agents{grid-template-columns:1fr;grid-template-rows:repeat(3,56px);gap:10px}.scene-1 .journey-agent{grid-column:1!important}.scene-1 .journey-agent:nth-of-type(1){grid-row:1!important}.scene-1 .journey-agent:nth-of-type(2){grid-row:2!important}.scene-1 .journey-agent:nth-of-type(3){grid-row:3!important}.scene-1 .project-folder{width:220px}.scene-0 .project-folder{width:220px}.journey-step:nth-of-type(1),.journey-step:nth-of-type(2){min-height:295px}@media(max-width:1100px){.scene-0 .project-folder,.scene-1 .project-folder{width:200px}.agent-speech{font-size:10px;padding:8px}}@media(max-width:760px){.scene-0 .project-folder,.scene-1 .project-folder{width:220px}.scene-0 .project-folder .journey-agents{grid-template-columns:1fr;grid-template-rows:56px}.journey-step:nth-of-type(1),.journey-step:nth-of-type(2){min-height:0}.scene-1 .project-folder .journey-agents{grid-template-rows:repeat(3,50px)}}
+
+.scene-1 .project-folder{width:290px}.scene-1 .project-folder .journey-agents{grid-template-columns:54px 1fr;grid-template-rows:56px 56px;gap:12px}.scene-1 .journey-agent:nth-of-type(1){grid-column:1!important;grid-row:1!important}.scene-1 .journey-agent:nth-of-type(2){grid-column:2!important;grid-row:1!important}.scene-1 .journey-agent:nth-of-type(3){grid-column:1 / -1!important;grid-row:2!important}.scene-5 .project-b .journey-agents{grid-template-rows:repeat(2,56px)}@media(max-width:1100px){.scene-1 .project-folder{width:260px}.scene-1 .project-folder .journey-agents{grid-template-columns:44px 1fr;grid-template-rows:50px 50px;gap:8px}.scene-1 .agent-speech{max-width:120px}}@media(max-width:760px){.scene-1 .project-folder{width:240px}.scene-1 .project-folder .journey-agents{grid-template-columns:42px 1fr;grid-template-rows:50px 50px;gap:8px}.scene-1 .agent-speech{max-width:112px;font-size:9px}.scene-5 .project-b .journey-agents{grid-template-rows:repeat(3,44px)}}
+</style>

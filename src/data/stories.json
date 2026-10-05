@@ -1,5 +1,26 @@
 [
-  {"id":"avatars","category":"Identity","title":"Give your agent a character","description":"Choose an included candy avatar or create your own. Keep its editable SVG in the agent folder, with a preview before saving.","url":"https://github.com/AM1010101/gum-drops/issues/1"},
-  {"id":"history","category":"Review","title":"See what changed. Go back.","description":"Bring the host's Git snapshots into the browser. Inspect a run's changes and review a restore before applying it.","url":"https://github.com/AM1010101/gum-drops/issues/2"},
-  {"id":"pairing","category":"Access","title":"Pair another device","description":"Open your agents on another device with a QR code and its own token. Keep the host private by default.","url":"https://github.com/AM1010101/gum-drops/issues/3"}
+  {
+    "id": "avatars",
+    "category": "Identity",
+    "title": "Give your agent a character",
+    "description": "Choose an included candy avatar or create your own. Keep its editable SVG in the agent folder, with a preview before saving.",
+    "url": "https://github.com/AM1010101/gum-drops/issues/1",
+    "upvotes": 0
+  },
+  {
+    "id": "history",
+    "category": "Review",
+    "title": "See what changed. Go back.",
+    "description": "Bring the host's Git snapshots into the browser. Inspect a run's changes and review a restore before applying it.",
+    "url": "https://github.com/AM1010101/gum-drops/issues/2",
+    "upvotes": 0
+  },
+  {
+    "id": "pairing",
+    "category": "Access",
+    "title": "Pair another device",
+    "description": "Open your agents on another device with a QR code and its own token. Keep the host private by default.",
+    "url": "https://github.com/AM1010101/gum-drops/issues/3",
+    "upvotes": 0
+  }
 ]
